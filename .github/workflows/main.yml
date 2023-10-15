@@ -1,0 +1,45 @@
+name: Schedule Action
+
+on:
+  schedule:
+    - cron: '59 23 * * *'
+
+jobs:
+  update-image:
+    name: Update image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install Pillow
+        run: python3 -m pip install --upgrade Pillow
+      - name: Download seismic data
+        run: |
+          TODAY=$(date -I)
+          NET="CC"                      # Network name
+          STA="SEP"                     # Station name
+          LOC="--"                      # Location
+          CHA="BHE"                     # Channel name
+          START=$TODAY"T00:00:00"       # Start time
+          END=$TODAY"T23:59:59"         # End time
+          FMT="ascii1"                  # Format
+          URL="https://service.iris.edu/irisws/timeseries/1/query"
+          URL+="?net="NET
+          URL+="&sta="STA
+          URL+="&loc="LOC
+          URL+="&cha="CHA
+          URL+="&start="START
+          URL+="&end="END
+          URL+="&demean=true"
+          URL+="&format="FMT
+          wget $URL -O seis.dat
+      - name: Process image
+        run: python3 process.py
+      - name: Commit image
+        run: |
+          git config --global user.email "noreply@gh_actions"
+          git config --global user.name "Github Actions"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git add out.bmp
+          git commit -m "Add image"
+          git push
