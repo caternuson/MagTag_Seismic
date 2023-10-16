@@ -24,14 +24,14 @@ jobs:
           END=$TODAY"T23:59:59"         # End time
           FMT="ascii1"                  # Format
           URL="https://service.iris.edu/irisws/timeseries/1/query"
-          URL+="?net="NET
-          URL+="&sta="STA
-          URL+="&loc="LOC
-          URL+="&cha="CHA
-          URL+="&start="START
-          URL+="&end="END
+          URL+="?net="$NET
+          URL+="&sta="$STA
+          URL+="&loc="$LOC
+          URL+="&cha="$CHA
+          URL+="&start="$START
+          URL+="&end="$END
           URL+="&demean=true"
-          URL+="&format="FMT
+          URL+="&format="$FMT
           wget $URL -O seis.dat
       - name: Process image
         run: python3 process.py
