@@ -16,16 +16,19 @@ HEIGHT = 296  # 128
 NN = 8        # pick a factor of HEIGHT
 HH = HEIGHT // NN
 
+# Add banded background
+BANDED_BG = False
+
 # Create image draw
 img = Image.new("L", (WIDTH, HEIGHT))
 draw = ImageDraw.Draw(img)
+draw.rectangle([(0,0), (WIDTH, HEIGHT)], fill=WHITE)
 
 # Draw background color bars
-c = 0
-GRAYS = (GRAY1, WHITE, GRAY2)
-for y in range(0, HEIGHT, HH):
-    draw.rectangle([(0, y), (WIDTH, y+HH)], fill=GRAYS[c%3])
-    c += 1
+if BANDED_BG:
+    GRAYS = (GRAY1, WHITE, GRAY2)
+    for i, y in enumerate(range(0, HEIGHT, HH)):
+        draw.rectangle([(0, y), (WIDTH, y+HH)], fill=GRAYS[i%3])
 
 # Read data
 data = []
