@@ -3,6 +3,7 @@ name: Schedule Action
 on:
   schedule:
     - cron: '42 23 * * *'
+  workflow_dispatch:
 
 jobs:
   update-image:
