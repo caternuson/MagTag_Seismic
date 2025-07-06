@@ -2,7 +2,7 @@ name: Schedule Action
 
 on:
   schedule:
-    - cron: '59 23 * * *'
+    - cron: '42 23 * * *'
 
 jobs:
   update-image:
